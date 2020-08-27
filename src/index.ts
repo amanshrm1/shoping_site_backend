@@ -20,7 +20,7 @@ const app = express()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use('/', router)
+//app.use('/', router)
 
 app.listen(process.env.PORT, () => {
   console.log(`port is running at ${process.env.PORT}` )
