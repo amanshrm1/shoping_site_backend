@@ -1,7 +1,9 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import * as dotenv from 'dotenv'
+dotenv.config()
 const app = express();
-const PORT = 5000
+const PORT = process.env.PORT
 
 import { router } from './default'
 
