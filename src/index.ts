@@ -31,8 +31,8 @@ const server = new GraphQLServer({
   }
 })
 
-server.express.use(bodyParser.urlencoded({extended:true}))
-server.express.use('/another', router)
+//server.express.use(bodyParser.urlencoded({extended:true}))
+//server.express.use('/another', router)
 
 server.start(options, ({port})=>{
   console.log(`The Sever is running at ${process.env.PORT} !`)
