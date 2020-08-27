@@ -23,6 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dotenv = exports.prisma = void 0;
+var body_parser_1 = __importDefault(require("body-parser"));
 var graphql_yoga_1 = require("graphql-yoga");
 var client_1 = require("@prisma/client");
 var dotenv = __importStar(require("dotenv"));
@@ -51,7 +52,7 @@ var server = new graphql_yoga_1.GraphQLServer({
         };
     }
 });
-//server.express.use(bodyParser.urlencoded({extended:true}))
+server.express.use(body_parser_1.default.urlencoded({ extended: true }));
 server.express.use('/another', default_1.router);
 server.start(options, function (_a) {
     var port = _a.port;

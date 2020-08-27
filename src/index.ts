@@ -31,7 +31,7 @@ const server = new GraphQLServer({
   }
 })
 
-//server.express.use(bodyParser.urlencoded({extended:true}))
+server.express.use(bodyParser.urlencoded({extended:true}))
 server.express.use('/another', router)
 
 server.start(options, ({port})=>{
