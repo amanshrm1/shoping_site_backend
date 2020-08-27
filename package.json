@@ -1,10 +1,14 @@
 {
+  "engines": {
+    "node": "12.0.0"
+  },
   "name": "test-app",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start:build": "tsc -w",
+    "startt:gen": "npm i @prisma/cli",
     "start:gen": "prisma generate",
     "start:run": "nodemon build/index.js",
     "start": "concurrently npm:start:*"
