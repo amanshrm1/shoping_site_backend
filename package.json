@@ -8,7 +8,6 @@
   "main": "index.js",
   "scripts": {
     "start:build": "tsc -w",
-    "startt:gen": "npm i @prisma/cli",
     "start:gen": "prisma generate",
     "start:run": "nodemon build/index.js",
     "start": "concurrently npm:start:*"
@@ -16,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/cli": "^2.5.1",
     "@prisma/client": "^2.5.1",
     "@types/body-parser": "^1.19.0",
     "@types/express": "^4.17.7",
