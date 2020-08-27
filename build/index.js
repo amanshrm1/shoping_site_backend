@@ -23,18 +23,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dotenv = exports.prisma = void 0;
-var express_1 = __importDefault(require("express"));
-var body_parser_1 = __importDefault(require("body-parser"));
+var apollo_server_1 = require("apollo-server");
 var client_1 = require("@prisma/client");
 var dotenv = __importStar(require("dotenv"));
 exports.dotenv = dotenv;
 dotenv.config();
+var types_1 = __importDefault(require("./types"));
+var user_1 = __importDefault(require("./resolvers/user"));
+var product_1 = __importDefault(require("./resolvers/product"));
+var description_1 = __importDefault(require("./resolvers/description"));
+var category_1 = __importDefault(require("./resolvers/category"));
+var order_1 = __importDefault(require("./resolvers/order"));
+var checkout_1 = __importDefault(require("./resolvers/checkout"));
 var prisma = new client_1.PrismaClient();
 exports.prisma = prisma;
-var default_1 = require("./default");
-var app = express_1.default();
-app.use(body_parser_1.default.urlencoded({ extended: true }));
-app.use('/', default_1.router);
-app.listen(process.env.PORT, function () {
-    console.log("port is running at " + process.env.PORT);
+// const app = express()
+// app.use(bodyParser.urlencoded({ extended: true }))
+// app.use('/', router)
+// app.listen(process.env.PORT, () => {
+//   console.log(`port is running at ${process.env.PORT}` )
+// })
+//const options = {
+var PORT = process.env.PORT;
+//endpoint: process.env.ENDPOINT
+var server = new apollo_server_1.ApolloServer({
+    typeDefs: types_1.default,
+    resolvers: [user_1.default, product_1.default, description_1.default, category_1.default, order_1.default, checkout_1.default],
+    context: function () {
+        return {
+            prisma: prisma
+        };
+    }
+});
+server.listen(process.env.PORT, function () {
+    console.log("server is running at " + process.env.PORT);
 });
