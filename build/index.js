@@ -22,15 +22,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
-var body_parser_1 = __importDefault(require("body-parser"));
+exports.dotenv = exports.prisma = void 0;
+var graphql_yoga_1 = require("graphql-yoga");
+var client_1 = require("@prisma/client");
 var dotenv = __importStar(require("dotenv"));
+exports.dotenv = dotenv;
 dotenv.config();
-var app = express_1.default();
-var PORT = process.env.PORT;
+var types_1 = __importDefault(require("./types"));
+var user_1 = __importDefault(require("./resolvers/user"));
+var product_1 = __importDefault(require("./resolvers/product"));
+var description_1 = __importDefault(require("./resolvers/description"));
+var category_1 = __importDefault(require("./resolvers/category"));
+var order_1 = __importDefault(require("./resolvers/order"));
+var checkout_1 = __importDefault(require("./resolvers/checkout"));
+var prisma = new client_1.PrismaClient();
+exports.prisma = prisma;
 var default_1 = require("./default");
-app.use(body_parser_1.default.urlencoded({ extended: true }));
-app.use('/', default_1.router);
-app.listen(PORT, function () {
-    console.log("app is listning at " + PORT);
+var options = {
+    PORT: process.env.PORT,
+    endpoint: process.env.ENDPOINT
+};
+var server = new graphql_yoga_1.GraphQLServer({
+    typeDefs: types_1.default,
+    resolvers: [user_1.default, product_1.default, description_1.default, category_1.default, order_1.default, checkout_1.default],
+    context: function () {
+        return {
+            prisma: prisma
+        };
+    }
+});
+//server.express.use(bodyParser.urlencoded({extended:true}))
+server.express.use('/another', default_1.router);
+server.start(options, function (_a) {
+    var port = _a.port;
+    console.log("The Sever is running at " + process.env.PORT + " !");
 });
