@@ -16,26 +16,36 @@ const prisma = new PrismaClient();
 
 import { router } from './default'
 
-const options = {
-  PORT : process.env.PORT,
-  endpoint: process.env.ENDPOINT
-}
+const app = express()
 
-const server = new GraphQLServer({
-  typeDefs,
-  resolvers: [user, product, description, category, order, checkout],
-  context(){
-    return {
-      prisma
-    }
-  }
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use('/', router)
+
+app.listen(process.env.PORT, () => {
+  console.log(`port is running at ${process.env.PORT}` )
 })
+
+// const options = {
+//   PORT : process.env.PORT,
+//   endpoint: process.env.ENDPOINT
+// }
+
+// const server = new GraphQLServer({
+//   typeDefs,
+//   resolvers: [user, product, description, category, order, checkout],
+//   context(){
+//     return {
+//       prisma
+//     }
+//   }
+// })
 
 //server.express.use(bodyParser.urlencoded({extended:true}))
 //server.express.use('/another', router)
 
-server.start(options, ({port})=>{
-  console.log(`The Sever is running at ${process.env.PORT} !`)
-})
+// server.start(options, ({port})=>{
+//   console.log(`The Sever is running at ${process.env.PORT} !`)
+// })
 
 export {prisma, dotenv}
