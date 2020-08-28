@@ -1,4 +1,4 @@
-import { sign, verify } from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
 import { dotenv }from '../index'
 dotenv.config();
 

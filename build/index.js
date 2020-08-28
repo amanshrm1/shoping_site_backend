@@ -28,7 +28,6 @@ var apollo_server_express_1 = require("apollo-server-express");
 var client_1 = require("@prisma/client");
 var dotenv = __importStar(require("dotenv"));
 exports.dotenv = dotenv;
-dotenv.config();
 var types_1 = __importDefault(require("./types"));
 var user_1 = __importDefault(require("./resolvers/user"));
 var product_1 = __importDefault(require("./resolvers/product"));
@@ -36,9 +35,13 @@ var description_1 = __importDefault(require("./resolvers/description"));
 var category_1 = __importDefault(require("./resolvers/category"));
 var order_1 = __importDefault(require("./resolvers/order"));
 var checkout_1 = __importDefault(require("./resolvers/checkout"));
+var default_1 = require("./default");
+/*  Please Check the Explanation.txt for all the routes */
+/* --------  created prisma client to deal with database ---------*/
 var prisma = new client_1.PrismaClient();
 exports.prisma = prisma;
-var default_1 = require("./default");
+dotenv.config();
+/* -------- GraphqlServer object  ------------------------------ */
 var server = new apollo_server_express_1.ApolloServer({
     typeDefs: types_1.default,
     resolvers: [user_1.default, product_1.default, description_1.default, category_1.default, order_1.default, checkout_1.default],
@@ -48,9 +51,11 @@ var server = new apollo_server_express_1.ApolloServer({
         };
     }
 });
+/*----------- Express integration ------------------------------------- */
 var app = express_1.default();
-app.use('/', default_1.router);
+app.use('/check', default_1.router);
 server.applyMiddleware({ app: app });
+/* --------- Server starts ------------------------------------ */
 app.listen(process.env.PORT, function () {
     console.log("server is running at " + process.env.PORT);
 });

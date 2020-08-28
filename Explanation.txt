@@ -1,0 +1,355 @@
+
+    Acceptance Criteria:
+​
+    Sell the list of items with their images and under respective categories
+​
+    on selecting a item, it should show  information related to that item(elaborated name, pricing, rating etc)
+​
+    add to cart functionality 
+
+    multiple items can be added to cart
+
+    buy now button in cart to create order 
+​
+    multiple users can login in the application and create any no of orders
+
+                     All the possible routes are written bellow 
+
+Total - 31 possible [ query + mutation]
+------------------------------------ Create a User -------------------------------------------
+mutation{
+  createUser(data:{
+    userId: 5
+    name: "Vishal" 
+  }){
+    userId
+  }
+}
+
+-----------------------------------Update the User ------------------------------------------
+mutation{
+  updateUser(data:{
+    name: "Vinod"
+  },where:{
+    userId: 2
+  }){
+    userId
+  }
+}
+
+------------------------------------ Delete the User ----------------------------------------
+mutation{
+  deleteUser(where:{
+    userId: 2
+  }){
+    userId
+    name
+  }
+}
+
+-------------------------------------- Create Category ----------------------------------------
+mutation{
+  createCategory(data:{
+    category: "Shoes"
+  }){
+    categoryId
+  }
+}
+
+---------------------------------- Update Category ------------------------------------------
+mutation{
+  updateCategory(data:{
+    category: "grocery"
+  },where:{
+    categoryId: 2
+  }){
+    categoryId
+  }
+}
+
+----------------------------------- Delete Category ------------------------------------------
+mutation{
+  deleteCategory(where:{
+    categoryId: 2
+  }){
+    category
+  }
+}
+
+-------------------------------------- Create a product -----------------------------------------
+mutation{
+  createProduct(data:{
+    imageUrl: "https://rukminim1.flixcart.com/image/309/371/k4u7i4w0/kids-shoe/u/g/9/5c-2016-im-baby-original-imafnne77echsycv.jpeg?q=50"
+  },where:{
+    categoryID: 5
+  }){
+    productId
+  }
+}
+
+--------------------------------------- Create a description ----------------------------------
+mutation{
+  createDescription(data:{
+    productName:"Velcro Casual Boots For Boys & Girls  (Multicolor)"
+    productDescription: "im baby shoes collection"
+    productPrice: 420
+  },where:{
+    descriptionID: 12
+  }){
+    descriptionId
+  }
+}
+
+-------------------------------------- Create a Order ----------------------------------------
+mutation {
+  createOrder(data:{
+    orderProductName:" Samsung M01 core (Black, 32 GB) (2 GB RAM)	"
+    orderProductPrice: 9720
+  },where:{
+    userID: 5
+  }){
+    ItemId
+  }
+}
+
+------------------------------------- Get all Users ----------------------------------------
+query{
+  getAllUsers{
+    userId
+    name
+  }
+}
+
+-------------------------------------- Get a particular user --------------------------------
+query{
+  getUser(where:{
+    userId: 1
+  }){
+    name
+  }
+}
+
+------------------------------------- Get a list  of all categories -------------------------
+query{
+  getCategories{
+    categoryId
+    category
+  }
+}
+
+------------------------------------ Get a single category  --------------------------------
+query{
+  getCategory(where:{
+    categoryId: 2
+  }){
+    category
+  }
+}
+
+--------------------------------- Get single category related products -------------------
+query{
+  getCategory(where:{
+    categoryId: 2
+  }){
+    category
+    products{
+      productId
+      imageUrl
+    }
+  }
+}
+
+--------------------- Get single category related products with their description ---------
+query{
+  getCategory(where:{
+    categoryId: 2
+  }){
+    category
+    products{
+      productId
+      description{
+        productName
+        productDescription
+        productPrice
+      }
+    }
+  }
+}
+
+------------------------------------- Get a list of all products --------------------------
+query{
+  getProducts{
+    productId
+    imageUrl
+  }
+}
+
+------------------------- Get a list of all products with description ---------------------
+query{
+  getProducts{
+    productId
+    imageUrl
+    description{
+      descriptionId
+      productName
+      productDescription
+      productPrice
+    }
+  }
+}
+
+------------------------- Get a product with its discription ----------------------------
+query {
+  getProduct(where:{
+    productId: 2
+  }){
+    imageUrl
+    productId
+    description{
+      descriptionId
+      productName
+      productPrice
+    }
+  }
+}
+
+------------------- Get a list of all products belongs to respective category -------------
+query {
+  getProducts{
+    productId
+    imageUrl
+    category{
+      categoryId
+      category
+    }
+  }
+}
+
+----- Get a list of all categories having all products under it with their description ---- 
+query{
+  getCategories{
+    categoryId
+    category
+    products{
+      productId
+      imageUrl
+      description{
+        productName
+        productDescription
+        productPrice
+      }
+    }
+  }
+}
+
+---------- Get a category with its product and discription -----------------------------
+query{
+  getCategory(where:{
+    categoryId: 1
+  }){
+    products{
+      productId
+      description{
+      productName
+        productPrice
+      }
+    }
+  }
+}
+
+--------------------------------- Get a list of all the Orders --------------------------
+query{
+  getAllOrders{
+    orderProductName
+    orderProductPrice
+  }
+}
+
+--------------------------------- Update an Order --------------------------------------
+mutation{
+  updateOrder(data:{
+    orderProductName: Black T-Shirt
+  },where:{
+    ItemId: 2
+  }){
+    ItemId
+  }
+}
+
+-------------------------------- Delete an order  ------------------------------------
+mutation{
+  deleteOrder(where:{
+    ItemId: where.ItemId
+  })
+}
+
+--------------------- Get a list of all the orders and their belonging user ------------
+query{
+  getAllOrders{
+    orderProductName
+    userID
+    user{
+      name
+    }
+  }
+}
+
+---------------------- Get a single order and belonging user ---------------------------
+query{
+  getOrder(where:{
+    ItemId:2
+  }){
+    orderProductName
+  }
+}
+
+
+---------------------- Get all the orders of a single User ------------------------------
+query{
+  getUser(where:{
+    userId: 2
+  }){
+    orders{
+      ItemId
+      orderProductName
+      orderProductPrice
+    }
+  }
+}
+
+------------------------- Get the total order amount of a particular user ---------------
+query{
+  checkoutAmount(
+    where:{
+      userID: 2
+    }
+  ){
+    amountToBePayed
+  }
+}
+
+-----------------------  Get all Users with their respective Orders ----------------------
+query{
+  getAllUsers{
+    userId
+    orders{
+      ItemId
+      orderProductName
+    }
+  }
+}
+
+-------------- Get all Users with their respective order and total checkout amount -------
+query{
+ getAllUsers{
+  userId
+  orders{
+    orderProductName
+  }
+  totalOrderAmount{
+    amountToBePayed
+  }
+ }
+}
+
+Problem: graphql-yoga supports both of them but their usage is not yet documented, which makes it hard to actually implement anything. I opened an issue to know more a while back and this post is where it led me.
