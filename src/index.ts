@@ -31,7 +31,7 @@ const server = new ApolloServer({
 
 /*----------- Express integration ------------------------------------- */
 const app = express()
-app.use('/check', router)
+app.use('/', router)
 server.applyMiddleware({app})
 
 /* --------- Server starts ------------------------------------ */
