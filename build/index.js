@@ -23,7 +23,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dotenv = exports.prisma = void 0;
-var apollo_server_1 = require("apollo-server");
+var express_1 = __importDefault(require("express"));
+var apollo_server_express_1 = require("apollo-server-express");
 var client_1 = require("@prisma/client");
 var dotenv = __importStar(require("dotenv"));
 exports.dotenv = dotenv;
@@ -37,16 +38,8 @@ var order_1 = __importDefault(require("./resolvers/order"));
 var checkout_1 = __importDefault(require("./resolvers/checkout"));
 var prisma = new client_1.PrismaClient();
 exports.prisma = prisma;
-// const app = express()
-// app.use(bodyParser.urlencoded({ extended: true }))
-// app.use('/', router)
-// app.listen(process.env.PORT, () => {
-//   console.log(`port is running at ${process.env.PORT}` )
-// })
-//const options = {
-var PORT = process.env.PORT;
-//endpoint: process.env.ENDPOINT
-var server = new apollo_server_1.ApolloServer({
+var default_1 = require("./default");
+var server = new apollo_server_express_1.ApolloServer({
     typeDefs: types_1.default,
     resolvers: [user_1.default, product_1.default, description_1.default, category_1.default, order_1.default, checkout_1.default],
     context: function () {
@@ -55,6 +48,9 @@ var server = new apollo_server_1.ApolloServer({
         };
     }
 });
-server.listen(process.env.PORT, function () {
+var app = express_1.default();
+app.use('/', default_1.router);
+server.applyMiddleware({ app: app });
+app.listen(process.env.PORT, function () {
     console.log("server is running at " + process.env.PORT);
 });

@@ -1,6 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import { ApolloServer } from 'apollo-server'
+import { ApolloServer } from 'apollo-server-express'
 import { GraphQLServer } from 'graphql-yoga'
 import { PrismaClient } from '@prisma/client'
 import * as dotenv from 'dotenv'
@@ -17,21 +17,6 @@ const prisma = new PrismaClient();
 
 import { router } from './default'
 
-// const app = express()
-
-// app.use(bodyParser.urlencoded({ extended: true }))
-
-// app.use('/', router)
-
-// app.listen(process.env.PORT, () => {
-//   console.log(`port is running at ${process.env.PORT}` )
-// })
-
-//const options = {
-  const PORT = process.env.PORT
-  //endpoint: process.env.ENDPOINT
-
-
 const server = new ApolloServer({
   typeDefs,
   resolvers: [user, product, description, category, order, checkout],
@@ -42,9 +27,33 @@ const server = new ApolloServer({
   }
 })
 
+const app = express()
+app.use('/', router)
+server.applyMiddleware({app})
 
-server.listen(process.env.PORT, () => {
+
+app.listen(process.env.PORT, () => {
   console.log(`server is running at ${process.env.PORT}`)
 })
+
+// ( async () => {
+//   const app = express();
+
+//   const server = new ApolloServer({
+//     typeDefs,
+//     resolvers: [user, product, description, category, order, checkout],
+//     context(){
+//       return {
+//         prisma
+//       }
+//     }
+//   })
+
+//   server.applyMiddleware({ app })
+  
+//   app.listen(4000, () => {
+//     console.log('server is running')
+//   })
+// })() 
 
 export {prisma, dotenv}
