@@ -351,5 +351,3 @@ query{
   }
  }
 }
-
-Problem: graphql-yoga supports both of them but their usage is not yet documented, which makes it hard to actually implement anything. I opened an issue to know more a while back and this post is where it led me.
