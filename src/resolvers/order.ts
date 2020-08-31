@@ -21,17 +21,14 @@ export default {
 
   Mutation: {
     /* ------------------ Mutation to create Order --------------------------   */
-    createOrder: async (parent: any, { data, where }: any, { prisma }: any) => {
-
-     const create =  prisma.order.create({
+    createOrder: async (parent: any, { data, where }: any, { prisma }: any) =>  prisma.order.create({
         data: {
           ...data,
           belongs: {
             connect: { userId: where.userID }
           }
         }
-      })
-    },
+    }),
 
     /* ------------------ Mutation to update Order --------------------------   */
     updateOrder: (parent: any, { data, where }: any, { prisma }: any) => prisma.order.update({
