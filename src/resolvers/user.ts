@@ -1,5 +1,5 @@
 import { sign } from 'jsonwebtoken'
-import { dotenv }from '../index'
+import { dotenv } from '../index'
 dotenv.config();
 
 const secret: string = process.env.SECRET!
@@ -97,5 +97,5 @@ export default {
         }
       })
     }
-  }
+  },
 }
