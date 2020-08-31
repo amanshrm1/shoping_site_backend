@@ -53,7 +53,7 @@ var server = new apollo_server_express_1.ApolloServer({
 });
 /*----------- Express integration ------------------------------------- */
 var app = express_1.default();
-app.use('/check', default_1.router);
+app.use('/', default_1.router);
 server.applyMiddleware({ app: app });
 /* --------- Server starts ------------------------------------ */
 app.listen(process.env.PORT, function () {
