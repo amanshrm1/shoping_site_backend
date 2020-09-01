@@ -27,7 +27,7 @@ export default {
 
   Mutation: {
     /* ------------------ Mutation to create Order --------------------------   */
-    createOrder: (parent: any, { data, where }: any, { prisma }: any) =>  {
+    createOrder: (parent: any, { data  }: any, { prisma }: any) =>  {
       
       const extractedUserId: any =  decode(tokenToCheck, {complete: true}) 
 
