@@ -70,7 +70,7 @@ export default {
       if (!user) {
         throw new Error('User not found')
       }
-      let accessToken = sign({ where }, secret ,{expiresIn: tokenExpiry})
+      let accessToken = sign({ where }, secret )
 
       return {
         accessToken: accessToken

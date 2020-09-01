@@ -138,7 +138,7 @@ exports.default = {
                             if (!user) {
                                 throw new Error('User not found');
                             }
-                            accessToken = jsonwebtoken_1.sign({ where: where }, secret, { expiresIn: tokenExpiry });
+                            accessToken = jsonwebtoken_1.sign({ where: where }, secret);
                             return [2 /*return*/, {
                                     accessToken: accessToken
                                 }];

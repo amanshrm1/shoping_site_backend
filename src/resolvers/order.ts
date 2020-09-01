@@ -1,3 +1,9 @@
+import {  decode } from 'jsonwebtoken'
+import { dotenv } from '../index'
+dotenv.config();
+
+const tokenToCheck:string = process.env.ACCESSTOKEN4!
+
 export default {
   Query: {
     /* ------------------ Query to get all Orders --------------------------   */
@@ -21,14 +27,20 @@ export default {
 
   Mutation: {
     /* ------------------ Mutation to create Order --------------------------   */
-    createOrder: async (parent: any, { data, where }: any, { prisma }: any) =>  prisma.order.create({
+    createOrder: (parent: any, { data, where }: any, { prisma }: any) =>  {
+      
+      const extractedUserId: any =  decode(tokenToCheck, {complete: true}) 
+
+      const createOrder = prisma.order.create({
         data: {
           ...data,
           belongs: {
-            connect: { userId: where.userID }
+            connect: { userId: extractedUserId['payload']['where']['userId'] }
           }
         }
-    }),
+      })
+      return createOrder
+    },
 
     /* ------------------ Mutation to update Order --------------------------   */
     updateOrder: (parent: any, { data, where }: any, { prisma }: any) => prisma.order.update({

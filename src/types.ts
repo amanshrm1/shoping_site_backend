@@ -76,7 +76,7 @@ export default `
   createDescription(data: createDescriptionData!, where: createDescriptionUniqueInput!): Description
   updateDescription(data: createDescriptionData!, where: descriptionUniqueInput!): Description
 
-  createOrder(data: createOrderData!, where: createOrderUniqueInput!): Order
+  createOrder(data: createOrderData!): Order
   updateOrder(data: createOrderData!, where: updateOrderUniqueInput!): Order
   deleteOrder(where: updateOrderUniqueInput!): Order
  }
