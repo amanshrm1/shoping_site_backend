@@ -1,8 +1,6 @@
 import express from 'express'
-import {Request, Response} from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { PrismaClient } from '@prisma/client'
-import { verify } from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
 import { default as typeDefs} from './types'
 import { default as user } from './resolvers/user'
