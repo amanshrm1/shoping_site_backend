@@ -28,7 +28,7 @@ export default {
   Mutation: {
     /* ------------------ Mutation to create Order --------------------------   */
     createOrder: (parent: any, { data  }: any, { prisma }: any) =>  {
-      
+      /* -- extracting userid from token so as to order fro that particular user ------*/
       const extractedUserId: any =  decode(tokenToCheck, {complete: true}) 
 
       const createOrder = prisma.order.create({
