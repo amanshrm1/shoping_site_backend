@@ -2,7 +2,7 @@ import { decode, JsonWebTokenError, verify } from 'jsonwebtoken'
 import { dotenv } from '../index'
 dotenv.config();
 
-const tokenToCheck:string = process.env.ACCESSTOKEN1!, salt: any = process.env.SALT
+const tokenToCheck:string = process.env.ACCESSTOKEN1!
 
 export default {
   Query: {
