@@ -1,9 +1,10 @@
 import { sign } from 'jsonwebtoken'
+import bcrypt from 'bcrypt';
 import { dotenv } from '../index'
 dotenv.config();
 
-const secret: string = process.env.SECRET!
-const tokenExpiry = process.env.EXPTOKENTIME
+const secret: string = process.env.SECRET!, tokenExpiry = process.env.EXPTOKENTIME, salt: any = process.env.SALT
+
 
 export default {
 
@@ -50,31 +51,42 @@ export default {
   Mutation: {
     /* ------------------ Mutation to get create User --------------------------   */
     createUser: (parent: any, { data }: any, { prisma }: any) => {
+      
+      const { username, password } = data
+
+      let hashPassword = bcrypt.hashSync(password, salt)
+      
       return prisma.user.create({
         data: {
-          ...data
+          username: username,
+          password: hashPassword
         }
       })
     },
 
     /* ------------------ Provide Token for track of user ---------------------- */
     loginUser: async (parent: any, { where }: any, { prisma }: any ) => {
-  
-      const { userId } = where
+
       const user = await prisma.user.findOne({
         where: {
-          userId: where.userId
+          username: where.username
         }
       })
 
       if (!user) {
         throw new Error('User not found')
       }
-      let accessToken = sign({ where }, secret )
 
-      return {
-        accessToken: accessToken
+      const passwordCheck = bcrypt.compareSync(where.password, user['password'])
+      
+      if(passwordCheck == true){
+        let accessToken = sign({ where }, secret )
+
+        return {
+          accessToken: accessToken
+        }
       }
+      throw new Error('invalid credentials')
     },
 
     /* ------------------ Mutation to update User --------------------------   */

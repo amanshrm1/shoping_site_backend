@@ -55,7 +55,7 @@ exports.default = {
             var data = _a.data, where = _a.where;
             var prisma = _b.prisma;
             return prisma.product.create({
-                data: __assign(__assign({}, data), { belongs: {
+                data: __assign(__assign({}, data), { category: {
                         connect: { categoryId: where.categoryID }
                     } })
             });

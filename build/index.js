@@ -33,10 +33,11 @@ var user_1 = __importDefault(require("./resolvers/user"));
 var product_1 = __importDefault(require("./resolvers/product"));
 var description_1 = __importDefault(require("./resolvers/description"));
 var category_1 = __importDefault(require("./resolvers/category"));
+var cart_1 = __importDefault(require("./resolvers/cart"));
 var order_1 = __importDefault(require("./resolvers/order"));
 var checkout_1 = __importDefault(require("./resolvers/checkout"));
 var default_1 = require("./default");
-/*  Please Check the Explanation.txt for all the routes */
+// /*  Please Check the Explanation.txt for all the routes */
 /* --------  created prisma client to deal with database ---------*/
 var prisma = new client_1.PrismaClient();
 exports.prisma = prisma;
@@ -44,7 +45,7 @@ dotenv.config();
 /* -------- GraphqlServer object  ------------------------------ */
 var server = new apollo_server_express_1.ApolloServer({
     typeDefs: types_1.default,
-    resolvers: [user_1.default, product_1.default, description_1.default, category_1.default, order_1.default, checkout_1.default],
+    resolvers: [user_1.default, category_1.default, product_1.default, description_1.default, cart_1.default, order_1.default, checkout_1.default],
     context: function () {
         return {
             prisma: prisma

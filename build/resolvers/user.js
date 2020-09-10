@@ -46,12 +46,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsonwebtoken_1 = require("jsonwebtoken");
+var bcrypt_1 = __importDefault(require("bcrypt"));
 var index_1 = require("../index");
 index_1.dotenv.config();
-var secret = process.env.SECRET;
-var tokenExpiry = process.env.EXPTOKENTIME;
+var secret = process.env.SECRET, tokenExpiry = process.env.EXPTOKENTIME, salt = process.env.SALT;
 exports.default = {
     Query: {
         /* ------------------ Query to get all Users --------------------------   */
@@ -114,8 +117,13 @@ exports.default = {
         createUser: function (parent, _a, _b) {
             var data = _a.data;
             var prisma = _b.prisma;
+            var username = data.username, password = data.password;
+            var hashPassword = bcrypt_1.default.hashSync(password, salt);
             return prisma.user.create({
-                data: __assign({}, data)
+                data: {
+                    username: username,
+                    password: hashPassword
+                }
             });
         },
         /* ------------------ Provide Token for track of user ---------------------- */
@@ -123,25 +131,27 @@ exports.default = {
             var where = _a.where;
             var prisma = _b.prisma;
             return __awaiter(void 0, void 0, void 0, function () {
-                var userId, user, accessToken;
+                var user, passwordCheck, accessToken;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
-                        case 0:
-                            userId = where.userId;
-                            return [4 /*yield*/, prisma.user.findOne({
-                                    where: {
-                                        userId: where.userId
-                                    }
-                                })];
+                        case 0: return [4 /*yield*/, prisma.user.findOne({
+                                where: {
+                                    username: where.username
+                                }
+                            })];
                         case 1:
                             user = _c.sent();
                             if (!user) {
                                 throw new Error('User not found');
                             }
-                            accessToken = jsonwebtoken_1.sign({ where: where }, secret);
-                            return [2 /*return*/, {
-                                    accessToken: accessToken
-                                }];
+                            passwordCheck = bcrypt_1.default.compareSync(where.password, user['password']);
+                            if (passwordCheck == true) {
+                                accessToken = jsonwebtoken_1.sign({ where: where }, secret);
+                                return [2 /*return*/, {
+                                        accessToken: accessToken
+                                    }];
+                            }
+                            throw new Error('invalid credentials');
                     }
                 });
             });

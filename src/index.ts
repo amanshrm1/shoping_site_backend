@@ -7,11 +7,12 @@ import { default as user } from './resolvers/user'
 import { default as product } from './resolvers/product'
 import { default as description } from './resolvers/description'
 import { default as category } from './resolvers/category'
+import { default as cart } from './resolvers/cart'
 import { default as order } from './resolvers/order'
 import { default as checkout } from './resolvers/checkout'
-import { router } from './default'
+ import { router } from './default'
 
-/*  Please Check the Explanation.txt for all the routes */
+// /*  Please Check the Explanation.txt for all the routes */
 
 
 /* --------  created prisma client to deal with database ---------*/
@@ -21,7 +22,7 @@ dotenv.config();
 /* -------- GraphqlServer object  ------------------------------ */
 const server = new ApolloServer({
   typeDefs,
-  resolvers: [user, product, description, category, order, checkout],
+  resolvers: [user, category, product, description, cart, order, checkout],
   context(){
     return {
       prisma

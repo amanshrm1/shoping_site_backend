@@ -2,7 +2,8 @@ export default `
  
  type User {
   userId: Int!
-  name:   String!
+  username: String!
+  password: String!
   orders: [Order!]
   totalOrderAmount: PaymentAmount
   accessToken: String
@@ -30,11 +31,21 @@ export default `
   descriptionID: Int!
  }
 
+ type Cart {
+   cartId: Int!
+   cProductName: String
+   cProductPrice : Int
+   cProductQuantity: Int
+   cfProductPrice: Int
+ }
+
  type Order {
   ItemId: Int!
   orderProductName: String!
   orderProductPrice: Int!
+  orderProductQuantity: Int!
   userID: Int!
+  cartID: Int!
   user: User!
  }
 
@@ -52,16 +63,17 @@ export default `
   getProduct(where: productUniqueInput!): Product
   getDescriptions: [Description]
   getDescription(where: getDescriptionUniqueInput!): Description
+  getAllCartItem: [Cart]
   getAllOrders: [Order]
   getOrder(where: updateOrderUniqueInput!): Order
-  checkoutAmount(where: createOrderUniqueInput!): PaymentAmount 
+  checkoutAmount(where: createOrderUniqueInput): PaymentAmount 
  }
 
  
 
  type Mutation {
   createUser(data: createUserData!): User
-  loginUser(where: userWhereUniqueInput): User
+  loginUser(where: userLoginInput!): User
   updateUser(data: updateUserData!, where: userWhereUniqueInput!): User
   deleteUser(where: userWhereUniqueInput!): User
 
@@ -76,15 +88,35 @@ export default `
   createDescription(data: createDescriptionData!, where: createDescriptionUniqueInput!): Description
   updateDescription(data: createDescriptionData!, where: descriptionUniqueInput!): Description
 
-  createOrder(data: createOrderData!): Order
+  createOrder(data: createOrderData!,where: createOrderUniqueInput): Order
   updateOrder(data: createOrderData!, where: updateOrderUniqueInput!): Order
   deleteOrder(where: updateOrderUniqueInput!): Order
+
+  createCartItem(data: createCartItemData!): Cart
+  deleteCartItem(where: cartUniqueId!): Cart
+  updateCartItem(data: updateCartItemData!, where: cartUniqueId!): Cart
  }
 
+ input cartUniqueId {
+   cartId: Int!
+ }
+
+ input updateCartItemData {
+  cProductPrice: Int
+  cProductQuantity: Int
+  cfProductPrice: Int
+ }
+
+ input createCartItemData {
+   cProductName: String!
+   cProductPrice: Int!
+   cProductQuantity: Int!
+   cfProductPrice : Int
+ }
  
  input createUserData {
-   userId: Int
-   name: String
+   username: String!
+   password: String!
  }
 
  input updateUserData {
@@ -93,6 +125,11 @@ export default `
 
  input userWhereUniqueInput {
    userId: Int!
+ }
+
+ input userLoginInput {
+  username: String!
+  password: String!
  }
 
  input createCategoryData {
@@ -128,10 +165,11 @@ export default `
  input createOrderData {
   orderProductName: String!
   orderProductPrice: Int!
+  orderProductQuantity: Int!
  }
 
  input createOrderUniqueInput {
-  userID: Int!
+  cartID: Int!
  }
 
  input getDescriptionUniqueInput {

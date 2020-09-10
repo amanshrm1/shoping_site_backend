@@ -31,7 +31,7 @@ export default {
     createProduct: (parent: any, { data, where }: any, { prisma }: any) => prisma.product.create({
       data: {
         ...data,
-        belongs: {
+        category: {
           connect: { categoryId: where.categoryID }
         }
       }

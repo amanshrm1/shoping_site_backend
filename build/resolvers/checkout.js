@@ -43,11 +43,12 @@ exports.default = {
             var where = _a.where;
             var prisma = _b.prisma;
             return __awaiter(void 0, void 0, void 0, function () {
-                var amountToBePayed, result, key;
+                var amountToBePayed, result, key, result, key;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
                         case 0:
                             amountToBePayed = 0;
+                            if (!where) return [3 /*break*/, 2];
                             return [4 /*yield*/, prisma.order.findMany({
                                     where: {
                                         userID: where.userID
@@ -61,7 +62,17 @@ exports.default = {
                                 }
                                 return [2 /*return*/, { amountToBePayed: amountToBePayed }];
                             }
-                            throw new Error('User dont have any orders');
+                            throw new Error('No orders');
+                        case 2: return [4 /*yield*/, prisma.cart.findMany()];
+                        case 3:
+                            result = _c.sent();
+                            if (result != []) {
+                                for (key in result) {
+                                    amountToBePayed += result[key].cfProductPrice;
+                                }
+                                return [2 /*return*/, { amountToBePayed: amountToBePayed }];
+                            }
+                            throw new Error('Cart is Empty');
                     }
                 });
             });

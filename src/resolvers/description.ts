@@ -16,7 +16,7 @@ export default {
     createDescription: (parent: any, { data, where }: any, { prisma }: any) => prisma.description.create({
       data: {
         ...data,
-        belongs: {
+        product: {
           connect: { productId: where.descriptionID }
         }
       }

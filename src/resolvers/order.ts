@@ -1,8 +1,8 @@
-import {  decode } from 'jsonwebtoken'
+import { decode, JsonWebTokenError, verify } from 'jsonwebtoken'
 import { dotenv } from '../index'
 dotenv.config();
 
-const tokenToCheck:string = process.env.ACCESSTOKEN4!
+const tokenToCheck:string = process.env.ACCESSTOKEN1!, salt: any = process.env.SALT
 
 export default {
   Query: {
@@ -27,19 +27,39 @@ export default {
 
   Mutation: {
     /* ------------------ Mutation to create Order --------------------------   */
-    createOrder: (parent: any, { data  }: any, { prisma }: any) =>  {
-      /* -- extracting userid from token so as to order fro that particular user ------*/
-      const extractedUserId: any =  decode(tokenToCheck, {complete: true}) 
+    
+    createOrder: async (parent: any, { data, where }: any, { prisma }: any) => {
 
-      const createOrder = prisma.order.create({
-        data: {
-          ...data,
-          belongs: {
-            connect: { userId: extractedUserId['payload']['where']['userId'] }
+      const extractUsernameForuserId: any =  decode(tokenToCheck, {complete: true}) 
+      
+      if(extractUsernameForuserId != null){
+        const getUserId = await prisma.user.findOne({
+          where: {
+            username: extractUsernameForuserId['payload']['where']['username']
           }
-        }
-      })
-      return createOrder
+        })
+        console.log(getUserId['userId'])
+  
+        const result = await prisma.order.create({
+          data: {
+            ...data,
+            user: {
+              connect: { userId: getUserId['userId'] }
+            },
+            cart: {
+              connect: { cartId: where.cartID}
+            }
+          }
+        })
+  
+        const deleteFromCart = await prisma.cart.delete({
+          where: {
+            cartId: where.cartID
+          }
+        })
+        return result
+      }
+      throw new Error('no token provided')
     },
 
     /* ------------------ Mutation to update Order --------------------------   */
@@ -59,5 +79,4 @@ export default {
       }
     })
   }
-
 }
